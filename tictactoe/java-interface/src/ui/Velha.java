@@ -48,10 +48,17 @@ public class Velha implements  ActionListener{
             canPlay = false;
             JOptionPane.showMessageDialog(null, "Jogo empatado");
         } else {
+            /*
+
             String newBoard = info.getTerm("Z").toString().replace("[", "").replace("]",
-                    "").replace(" ", "");
-            System.out.println(newBoard);
-            board = newBoard.split(",");
+                                "").replace(" ", "");
+                        System.out.println(newBoard);
+                        board = newBoard.split(",");
+                        System.out.println(Arrays.toString(board));
+
+            */
+            int newPos = String.valueOf(info.getTerm("Z"));
+            board[newPos-1] = "o";
             System.out.println(Arrays.toString(board));
             for (int i = 0; i < board.length; i++) {
                 if (board[i].equals("o")) {
