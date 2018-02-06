@@ -4,10 +4,8 @@ import javax.swing.*;
 import alice.tuprolog.*;
 
 import java.awt.*;
-import java.awt.desktop.SystemEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,12 +36,10 @@ public class Velha implements  ActionListener{
 
     public void testeProlog(String actualBoard) throws Exception{
         Prolog engine = new Prolog();
-       // File file = new File(Velha.class.getClass().getResource("tictactoe-game.pl").getFile());
         FileInputStream fis = new FileInputStream("../tictactoe-game.pl");
         Theory theory = new Theory(fis);
         engine.setTheory (theory);
         SolveInfo info = engine.solve("bestMove([o, play, "+actualBoard+"],[X,Y,Z]).");
-        //System.out.println(info.getTerm("Y"));
         if (!info.isSuccess()) {
             canPlay = false;
             JOptionPane.showMessageDialog(null, "Jogo empatado");
@@ -73,34 +69,42 @@ public class Velha implements  ActionListener{
         p1Button.setName("0");
         p1Button.setText("");
         p1Button.setActionCommand("0");
+
         p2Button.addActionListener(this);
         p2Button.setText("");
         p2Button.setName("1");
         p2Button.setActionCommand("1");
+
         p3Button.addActionListener(this);
         p3Button.setText("");
         p3Button.setName("2");
         p3Button.setActionCommand("2");
+
         p4Button.addActionListener(this);
         p4Button.setText("");
         p4Button.setName("3");
         p4Button.setActionCommand("3");
+
         p5Button.addActionListener(this);
         p5Button.setText("");
         p5Button.setName("4");
         p5Button.setActionCommand("4");
+
         p6Button.addActionListener(this);
         p6Button.setText("");
         p6Button.setName("5");
         p6Button.setActionCommand("5");
+
         p7Button.addActionListener(this);
         p7Button.setText("");
         p7Button.setName("6");
         p7Button.setActionCommand("6");
+
         p8Button.addActionListener(this);
         p8Button.setText("");
         p8Button.setName("7");
         p8Button.setActionCommand("7");
+
         p9Button.addActionListener(this);
         p9Button.setText("");
         p9Button.setName("8");

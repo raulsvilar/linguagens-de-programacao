@@ -1,121 +1,90 @@
-%
-%
-%MINIMAX
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+moveIA([a,o,o,_,_,_,_,_,_],1).
+moveIA([o,a,o,_,_,_,_,_,_],2).
+moveIA([o,o,a,_,_,_,_,_,_],3).
 
-% minimax(Pos, BestNextPos, Val)
-% Pos is a position, Val is its minimax value.
-% Best move from Pos leads to position BestNextPos.
-minimax(Pos, BestNextPos, Val) :-                     % Pos has successors
-    bagof(NextPos, move(Pos, NextPos), NextPosList),
-    best(NextPosList, BestNextPos, Val), !.
+moveIA([_,_,_,a,o,o,_,_,_],4).
+moveIA([_,_,_,o,a,o,_,_,_],5).
+moveIA([_,_,_,o,o,a,_,_,_],6).
 
-minimax(Pos, _, Val) :-                     % Pos has no successors
-    utility(Pos, Val).
+moveIA([_,_,_,_,_,_,a,o,o],7).
+moveIA([_,_,_,_,_,_,o,a,o],8).
+moveIA([_,_,_,_,_,_,x,x,o],9).
 
+moveIA([a,_,_,o,_,_,o,_,_],1).
+moveIA([o,_,_,a,_,_,o,_,_],4).
+moveIA([o,_,_,o,_,_,a,_,_],7).
 
-best([Pos], Pos, Val) :-
-    minimax(Pos, _, Val), !.
+moveIA([_,a,_,_,o,_,_,o,_],2).
+moveIA([_,o,_,_,a,_,_,o,_],5).
+moveIA([_,o,_,_,o,_,_,a,_],8).
 
-best([Pos1 | PosList], BestPos, BestVal) :-
-    minimax(Pos1, _, Val1),
-    best(PosList, Pos2, Val2),
-    betterOf(Pos1, Val1, Pos2, Val2, BestPos, BestVal).
+moveIA([_,_,a,_,_,o,_,_,o],3).
+moveIA([_,_,o,_,_,a,_,_,o],6).
+moveIA([_,_,o,_,_,o,_,_,a],9).
 
+moveIA([a,_,_,_,o,_,_,_,o],1).
+moveIA([o,_,_,_,a,_,_,_,o],5).
+moveIA([o,_,_,_,o,_,_,_,a],9).
 
-
-betterOf(Pos0, Val0, _, Val1, Pos0, Val0) :-   % Pos0 better than Pos1
-    min_to_move(Pos0),                         % MIN to move in Pos0
-    Val0 > Val1, !                             % MAX prefers the greater value
-    ;
-    max_to_move(Pos0),                         % MAX to move in Pos0
-    Val0 < Val1, !.                            % MIN prefers the lesser value
-
-betterOf(_, _, Pos1, Val1, Pos1, Val1).        % Otherwise Pos1 better than Pos0
+moveIA([_,_,a,_,o,_,o,_,_],3).
+moveIA([_,_,o,_,a,_,o,_,_],5).
+moveIA([_,_,o,_,o,_,a,_,_],7).
 
 
-%
-%
-%ENGINE
-%
-%
-%%%%%%%%%%%%%%%%%%
-
-% move(+Pos, -NextPos)
-% True if there is a legal (according to rules) move from Pos to NextPos.
-move([X1, play, Board], [X2, win, NextBoard]) :-
-    nextPlayer(X1, X2),
-    move_aux(X1, Board, NextBoard),
-    winPos(X1, NextBoard), !.
-
-move([X1, play, Board], [X2, draw, NextBoard]) :-
-    nextPlayer(X1, X2),
-    move_aux(X1, Board, NextBoard),
-    drawPos(X1,NextBoard), !.
-
-move([X1, play, Board], [X2, play, NextBoard]) :-
-    nextPlayer(X1, X2),
-    move_aux(X1, Board, NextBoard).
-
-% move_aux(+Player, +Board, -NextBoard)
-% True if NextBoard is Board whith an empty case replaced by Player mark.
-move_aux(P, [0|Bs], [P|Bs]).
-
-move_aux(P, [B|Bs], [B|B2s]) :-
-    move_aux(P, Bs, B2s).
+moveIA([a,a,a,a,x,a,a,a,a],1).
+moveIA([a,x,a,a,a,a,a,a,a],1).
+moveIA([a,a,a,x,a,a,a,a,a],1).
+moveIA([a,a,a,a,a,x,a,a,a],5).
+moveIA([a,a,a,a,a,a,a,x,a],5).
+moveIA([x,a,a,a,a,a,a,a,a],5).
+moveIA([a,a,x,a,a,a,a,a,a],5).
+moveIA([a,a,a,a,a,a,x,a,a],5).
+moveIA([a,a,a,a,a,a,a,a,x],5).
 
 
-% min_to_move(+Pos)
-% True if the next player to play is the MIN player.
-min_to_move([o, _, _]).
+moveIA([a,x,x,_,_,_,_,_,_],1).
+moveIA([x,a,x,_,_,_,_,_,_],2).
+moveIA([x,x,a,_,_,_,_,_,_],3).
 
-% max_to_move(+Pos)
-% True if the next player to play is the MAX player.
-max_to_move([x, _, _]).
+moveIA([_,_,_,a,x,x,_,_,_],4).
+moveIA([_,_,_,x,a,x,_,_,_],5).
+moveIA([_,_,_,x,x,a,_,_,_],6).
 
-% utility(+Pos, -Val) :-
-% True if Val the the result of the evaluation function at Pos.
-% We will only evaluate for final position.
-% So we will only have MAX win, MIN win or draw.
-% We will use  1 when MAX win
-%             -1 when MIN win
-%              0 otherwise.
-utility([o, win, _], 1).       % Previous player (MAX) has win.
-utility([x, win, _], -1).      % Previous player (MIN) has win.
-utility([_, draw, _], 0).
+moveIA([_,_,_,_,_,_,a,x,x],7).
+moveIA([_,_,_,_,_,_,x,a,x],8).
+moveIA([_,_,_,_,_,_,x,x,a],9).
 
-% winPos(+Player, +Board)
-% True if Player win in Board.
-winPos(P, [X1, X2, X3, X4, X5, X6, X7, X8, X9]) :-
-    equal(X1, X2, X3, P) ;    % 1st line
-    equal(X4, X5, X6, P) ;    % 2nd line
-    equal(X7, X8, X9, P) ;    % 3rd line
-    equal(X1, X4, X7, P) ;    % 1st col
-    equal(X2, X5, X8, P) ;    % 2nd col
-    equal(X3, X6, X9, P) ;    % 3rd col
-    equal(X1, X5, X9, P) ;    % 1st diag
-    equal(X3, X5, X7, P).     % 2nd diag
+moveIA([a,_,_,x,_,_,x,_,_],1).
+moveIA([x,_,_,a,_,_,x,_,_],4).
+moveIA([x,_,_,x,_,_,a,_,_],7).
 
-% drawPos(+Player, +Board)
-% True if the game is a draw.
-drawPos(_,Board) :-
-    \+ member(0, Board).
+moveIA([_,a,_,_,x,_,_,x,_],2).
+moveIA([_,x,_,_,a,_,_,x,_],5).
+moveIA([_,x,_,_,x,_,_,a,_],8).
+
+moveIA([_,_,a,_,_,x,_,_,x],3).
+moveIA([_,_,x,_,_,a,_,_,x],6).
+moveIA([_,_,x,_,_,x,_,_,a],9).
+
+moveIA([a,_,_,_,x,_,_,_,x],1).
+moveIA([x,_,_,_,a,_,_,_,x],5).
+moveIA([x,_,_,_,x,_,_,_,a],9).
+
+moveIA([_,_,a,_,x,_,x,_,_],3).
+moveIA([_,_,x,_,a,_,x,_,_],5).
+moveIA([_,_,x,_,x,_,a,_,_],7).
 
 
-% equal(+W, +X, +Y, +Z).
-% True if W = X = Y = Z.
-equal(X, X, X, X).
+testeVitoria(Board, Player, NewBoard) :- moveIA(Board, NewBoard), vitoria(Board,Player).
 
+%adicionaNaPosicao(Board,)
 
-%
-%
-% GAME
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% bestMove(+Pos, -NextPos)
-% Compute the best Next Position from Position Pos
-% with minimax or alpha-beta algorithm.
-bestMove(Pos, NextPos) :-
-    minimax(Pos, NextPos, _).
+vitoria(L,XY):- 
+    L = [XY,XY,XY,_,_,_,_,_,_];
+    L = [_,_,_,XY,XY,XY,_,_,_];
+    L = [_,_,_,_,_,_,XY,XY,XY];
+    L = [XY,_,_,XY,_,_,XY,_,_];
+    L = [_,XY,_,_,XY,_,_,XY,_];
+    L = [_,_,XY,_,_,XY,_,_,XY];
+    L = [XY,_,_,_,XY,_,_,_,XY];
+    L = [_,_,XY,_,XY,_,XY,_,_].
