@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="java-interface:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/java_interface_jar</output-path>
+    <root id="archive" name="java-interface.jar">
+      <element id="module-output" name="java-interface" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/tuprolog.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

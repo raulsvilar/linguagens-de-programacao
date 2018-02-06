@@ -6,6 +6,7 @@ import alice.tuprolog.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,30 +31,24 @@ public class Velha implements  ActionListener{
     public Velha() {
         initComponents();
         for (int i=0; i<board.length;i++) {
-            board[i] = "0";
+            board[i] = "a";
         }
     }
 
     public void testeProlog(String actualBoard) throws Exception{
         Prolog engine = new Prolog();
-        FileInputStream fis = new FileInputStream("../tictactoe-game.pl");
+        //File file = new File(Velha.class.getResource("tictactoe-game.pl").getFile());
+        //FileInputStream fis = new FileInputStream(Velha.class.getResource("../tictactoe-game.pl").getPath());
+        FileInputStream fis = new FileInputStream("tictactoe-game.pl");
         Theory theory = new Theory(fis);
         engine.setTheory (theory);
-        SolveInfo info = engine.solve("bestMove([o, play, "+actualBoard+"],[X,Y,Z]).");
+        //SolveInfo info = engine.solve("bestMove([o, play, "+actualBoard+"],[X,Y,Z]).");
+        SolveInfo info = engine.solve("moveIA("+actualBoard+",Z).");
         if (!info.isSuccess()) {
             canPlay = false;
             JOptionPane.showMessageDialog(null, "Jogo empatado");
         } else {
-            /*
-
-            String newBoard = info.getTerm("Z").toString().replace("[", "").replace("]",
-                                "").replace(" ", "");
-                        System.out.println(newBoard);
-                        board = newBoard.split(",");
-                        System.out.println(Arrays.toString(board));
-
-            */
-            int newPos = String.valueOf(info.getTerm("Z"));
+            int newPos = Integer.parseInt(info.getTerm("Z").toString());
             board[newPos-1] = "o";
             System.out.println(Arrays.toString(board));
             for (int i = 0; i < board.length; i++) {
@@ -64,9 +59,21 @@ public class Velha implements  ActionListener{
                     }
                 }
             }
-            if (info.getTerm("Y").toString().equals("win")) {
+            info = engine.solve("vitoria("+Arrays.toString(board)+",o).");
+            if (info.isSuccess()) {
                 canPlay = false;
                 JOptionPane.showMessageDialog(null, "Você perdeu o jogo");
+            } else {
+                int count = 0;
+                for (int i=0; i<board.length;i++) {
+                    if (board[i].equals("a")){
+                        count++;
+                    }
+                }
+                if (count == 0 || count == 1) {
+                    canPlay = false;
+                    JOptionPane.showMessageDialog(null, "Jogo empatado");
+                }
             }
         }
     }
